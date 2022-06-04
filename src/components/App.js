@@ -6,6 +6,13 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 
 function App() {
+  // Переменные состояния
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isViewImagePopupOpen, setViewImagePopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+
   // Обработчик нажатия на кнопку редактирования профиля
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -31,12 +38,6 @@ function App() {
     setSelectedCard(card);
     setViewImagePopupOpen(true);
   }
-  // Переменные состояния
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [isViewImagePopupOpen, setViewImagePopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});
 
   return (
     <div className="app">
@@ -52,6 +53,7 @@ function App() {
         <PopupWithForm
           name="profile-form"
           title="Редактировать профиль"
+          btnTitle="Сохранить"
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
         >
@@ -83,6 +85,7 @@ function App() {
         <PopupWithForm
           name="new-card-form"
           title="Новое место"
+          btnTitle="Создать"
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
         >
@@ -112,12 +115,14 @@ function App() {
         <PopupWithForm
           name="confirm-form"
           title="Вы уверены?"
+          btnTitle="Да"
           isOpen={false}
           onClose={closeAllPopups}
         />
         <PopupWithForm
           name="new-avatar-form"
           title="Обновить аватар"
+          btnTitle="Сохранить"
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
         >
