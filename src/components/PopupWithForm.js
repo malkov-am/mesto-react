@@ -1,10 +1,20 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-const PopupWithForm = ({ name, title, isOpen, onClose, btnTitle, children, onSubmit }) => {
+const PopupWithForm = ({
+  name,
+  title,
+  isOpen,
+  onClose,
+  btnTitle,
+  children,
+  onSubmit,
+  onOverlayClick,
+}) => {
   return (
     <div
       className={`popup popup_light popup_type_${name} ${isOpen && 'popup_opened'}`}
       id="edit-profile"
+      onClick={onOverlayClick}
     >
       <div className="popup__container">
         <form className="form" name={name} noValidate onSubmit={onSubmit}>

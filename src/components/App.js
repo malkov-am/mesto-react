@@ -71,6 +71,10 @@ function App() {
     setSelectedCard(card);
     setViewImagePopupOpen(true);
   }
+  // Обработчик клика по оверлею
+  function handleOverlayClick(evt) {
+    evt.target === evt.currentTarget && closeAllPopups();
+  }
   // Обработчик добавления лайка
   function handleCardLike(card) {
     // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
@@ -143,6 +147,7 @@ function App() {
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
+            onOverlayClick={handleOverlayClick}
           />
         </CurrentUserContext.Provider>
         <Footer />
@@ -150,19 +155,27 @@ function App() {
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
+          onOverlayClick={handleOverlayClick}
         />
         <ConfirmDeletePopup
           isOpen={isConfirmDeletePopupOpen}
           onClose={closeAllPopups}
           cardToDelete={cardToDelete}
           onConfirmDelete={handleCardDelete}
+          onOverlayClick={handleOverlayClick}
         />
         <EditAvatarPopup
           onClose={closeAllPopups}
           isOpen={isEditAvatarPopupOpen}
           onUpdateAvatar={handleUpdateAvatar}
+          onOverlayClick={handleOverlayClick}
         />
-        <ImagePopup card={selectedCard} onClose={closeAllPopups} isOpen={isViewImagePopupOpen} />
+        <ImagePopup
+          card={selectedCard}
+          onClose={closeAllPopups}
+          isOpen={isViewImagePopupOpen}
+          onOverlayClick={handleOverlayClick}
+        />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
+const AddPlacePopup = ({ isOpen, onClose, onAddPlace, onOverlayClick }) => {
   // Переменные состояния
   const [title, setTitle] = useState('');
   const [link, setLink] = useState('');
@@ -32,6 +32,7 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      onOverlayClick={onOverlayClick}
     >
       <input
         id="title"
