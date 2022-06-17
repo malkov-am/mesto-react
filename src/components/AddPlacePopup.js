@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-const AddPlacePopup = ({ isOpen, onClose, onAddPlace, onOverlayClick }) => {
+const AddPlacePopup = ({ isOpen, onClose, onAddPlace, onOverlayClick, isLoading }) => {
   // Переменные состояния
   const [title, setTitle] = useState('');
   const [link, setLink] = useState('');
@@ -28,7 +28,7 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace, onOverlayClick }) => {
     <PopupWithForm
       name="new-card-form"
       title="Новое место"
-      btnTitle="Создать"
+      btnTitle={!isLoading ? 'Создать' : 'Создание...'}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}

@@ -22,6 +22,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Обработка ошибок
   function handleError(error) {
@@ -90,43 +91,51 @@ function App() {
 
   // Обработчик удаления карточки
   function handleCardDelete(card) {
+    setIsLoading(true);
     api
       .deleteCard(card._id)
       .then(() => {
         setCards((state) => state.filter((c) => c._id !== card._id));
         closeAllPopups();
       })
-      .catch((error) => handleError(error));
+      .catch((error) => handleError(error))
+      .finally(() => setIsLoading(false));
   }
   // Обработчик обновления данных пользователя
   function handleUpdateUser(userData) {
+    setIsLoading(true);
     api
       .setProfileData(userData)
       .then((updatedUserData) => {
         setCurrentUser(updatedUserData);
         closeAllPopups();
       })
-      .catch((error) => handleError(error));
+      .catch((error) => handleError(error))
+      .finally(() => setIsLoading(false));
   }
   // Обработчик обновления аватара пользователя
   function handleUpdateAvatar(avatarData) {
+    setIsLoading(true);
     api
       .changeAvatar(avatarData)
       .then((updatedUserData) => {
         setCurrentUser(updatedUserData);
         closeAllPopups();
       })
-      .catch((error) => handleError(error));
+      .catch((error) => handleError(error))
+      .finally(() => setIsLoading(false));
   }
   // Обработчик добавления новой карточки
   function handleAddPlaceSubmit(cardData) {
+    setIsLoading(true);
     api
       .addCard(cardData)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
-      .catch((error) => handleError(error));
+      .catch((error) => handleError(error))
+      .finally(() => setIsLoading(false));
   }
 
   return (
@@ -148,6 +157,7 @@ function App() {
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
             onOverlayClick={handleOverlayClick}
+            isLoading={isLoading}
           />
         </CurrentUserContext.Provider>
         <Footer />
@@ -156,6 +166,7 @@ function App() {
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
           onOverlayClick={handleOverlayClick}
+          isLoading={isLoading}
         />
         <ConfirmDeletePopup
           isOpen={isConfirmDeletePopupOpen}
@@ -163,12 +174,14 @@ function App() {
           cardToDelete={cardToDelete}
           onConfirmDelete={handleCardDelete}
           onOverlayClick={handleOverlayClick}
+          isLoading={isLoading}
         />
         <EditAvatarPopup
           onClose={closeAllPopups}
           isOpen={isEditAvatarPopupOpen}
           onUpdateAvatar={handleUpdateAvatar}
           onOverlayClick={handleOverlayClick}
+          isLoading={isLoading}
         />
         <ImagePopup
           card={selectedCard}
