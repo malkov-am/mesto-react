@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-const PopupWithForm = ({ name, title, isOpen, onClose, btnTitle, children }) => {
+const PopupWithForm = ({ name, title, isOpen, onClose, btnTitle, children, onSubmit }) => {
   return (
     <div
       className={`popup popup_light popup_type_${name} ${isOpen && 'popup_opened'}`}
       id="edit-profile"
     >
       <div className="popup__container">
-        <form className="form" name={name} noValidate />
-        <h2 className="form__header">{title}</h2>
-        {children}
-        <button className="form__save-button" title={btnTitle} type="submit">
-          {btnTitle}
-        </button>
+        <form className="form" name={name} noValidate onSubmit={onSubmit}>
+          <h2 className="form__header">{title}</h2>
+          {children}
+          <button className="form__save-button" title={btnTitle} type="submit">
+            {btnTitle}
+          </button>
+        </form>
         <button
           className="popup__close-button"
           title="Закрыть"

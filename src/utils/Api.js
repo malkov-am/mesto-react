@@ -48,15 +48,19 @@ class Api {
       headers: this._headers,
     }).then((res) => this._handleResponse(res));
   }
+  // Изменить статус лайка
+  changeLikeCardStatus(cardId, isLiked) {
+    return !isLiked ? this._addLike(cardId) : this._removeLike(cardId);
+  }
   // Добавить лайк к карточке
-  addLike(cardId) {
+  _addLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'PUT',
       headers: this._headers,
     }).then((res) => this._handleResponse(res));
   }
   // Удалить лайк с карточки
-  removeLike(cardId) {
+  _removeLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'DELETE',
       headers: this._headers,
