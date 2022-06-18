@@ -1,32 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import useValidation from '../hooks/useValidation';
 import PopupWithForm from './PopupWithForm';
 
 const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, onOverlayClick, isLoading }) => {
-  // Переменные состояния
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  // Обработчик ввода в поле
-  function handleChangeName(evt) {
-    setName(evt.target.value);
-  }
-  function handleChangeDescription(evt) {
-    setDescription(evt.target.value);
-  }
   // Подписка на контекст с данными о текущем пользователе
   const currentUser = useContext(CurrentUserContext);
+  // Валидация формы
+  const { values, errors, isValid, handleChange, resetForms } = useValidation('.form');
   // Подстановка данных в форму
   useEffect(() => {
-    currentUser?.name && setName(currentUser.name);
-    currentUser?.about && setDescription(currentUser.about);
-  }, [currentUser, isOpen]);
-
+    currentUser && resetForms(currentUser, {}, true);
+  }, [currentUser, isOpen, resetForms]);
+  // Обработчик обновления данных профиля
   function handleSubmit(evt) {
     evt.preventDefault();
-    onUpdateUser({
-      name,
-      about: description,
-    });
+    onUpdateUser(values);
   }
 
   return (
@@ -38,6 +27,7 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, onOverlayClick, isLoa
       onClose={onClose}
       onSubmit={handleSubmit}
       onOverlayClick={onOverlayClick}
+      isValid={isValid}
     >
       <input
         id="name"
@@ -49,10 +39,10 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, onOverlayClick, isLoa
         required
         minLength="2"
         maxLength="40"
-        onChange={handleChangeName}
-        value={name}
+        onChange={handleChange}
+        value={values.name || ''}
       />
-      <span className="form__error-message name-error"></span>
+      <span className="form__error-message name-error">{errors.name}</span>
       <input
         id="about"
         name="about"
@@ -63,10 +53,10 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, onOverlayClick, isLoa
         required
         minLength="2"
         maxLength="200"
-        onChange={handleChangeDescription}
-        value={description}
+        onChange={handleChange}
+        value={values.about || ''}
       />
-      <span className="form__error-message about-error"></span>
+      <span className="form__error-message about-error">{errors.about}</span>
     </PopupWithForm>
   );
 };

@@ -1,28 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import useValidation from '../hooks/useValidation';
 import PopupWithForm from './PopupWithForm';
 
 const AddPlacePopup = ({ isOpen, onClose, onAddPlace, onOverlayClick, isLoading }) => {
-  // Переменные состояния
-  const [title, setTitle] = useState('');
-  const [link, setLink] = useState('');
-  // Обработчик ввода в поле названия
-  function handleChangeTitle(evt) {
-    setTitle(evt.target.value);
-  }
-  // Обработчик ввода в поле ссылки
-  function handleChangeLink(evt) {
-    setLink(evt.target.value);
-  }
+  // Валидация формы
+  const { values, errors, isValid, handleChange, resetForms } = useValidation('.form');
+  // Сброс полей формы при открытии
+  useEffect(() => {
+    resetForms();
+  }, [isOpen, resetForms]);
   // Обработчик добавления карточки
   function handleSubmit(evt) {
     evt.preventDefault();
-    onAddPlace({ name: title, link: link });
+    onAddPlace(values);
   }
-  // Сброс полей формы при открытии
-  useEffect(() => {
-    setTitle('');
-    setLink('');
-  }, [isOpen]);
 
   return (
     <PopupWithForm
@@ -33,6 +24,7 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace, onOverlayClick, isLoading 
       onClose={onClose}
       onSubmit={handleSubmit}
       onOverlayClick={onOverlayClick}
+      isValid={isValid}
     >
       <input
         id="title"
@@ -44,10 +36,10 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace, onOverlayClick, isLoading 
         required
         minLength="2"
         maxLength="30"
-        onChange={handleChangeTitle}
-        value={title}
+        onChange={handleChange}
+        value={values.name || ''}
       />
-      <span className="form__error-message title-error"></span>
+      <span className="form__error-message title-error">{errors.name}</span>
       <input
         id="link"
         name="link"
@@ -56,10 +48,10 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace, onOverlayClick, isLoading 
         placeholder="Ссылка на картинку"
         aria-label="Ссылка на картинку"
         required
-        onChange={handleChangeLink}
-        value={link}
+        onChange={handleChange}
+        value={values.link || ''}
       />
-      <span className="form__error-message link-error"></span>
+      <span className="form__error-message link-error">{errors.link}</span>
     </PopupWithForm>
   );
 };

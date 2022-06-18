@@ -9,6 +9,7 @@ const ConfirmDeletePopup = ({
   onOverlayClick,
   isLoading,
 }) => {
+  // Обработчик подтверждения удаления карточки
   function handleSubmit(evt) {
     evt.preventDefault();
     onConfirmDelete(cardToDelete);
@@ -23,6 +24,7 @@ const ConfirmDeletePopup = ({
       onClose={onClose}
       onSubmit={handleSubmit}
       onOverlayClick={onOverlayClick}
+      isValid={true}
     />
   );
 };

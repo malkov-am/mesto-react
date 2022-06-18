@@ -1,19 +1,37 @@
 import React, { useEffect, useRef } from 'react';
+import useValidation from '../hooks/useValidation';
 import PopupWithForm from './PopupWithForm';
 
 const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar, onOverlayClick, isLoading }) => {
-  const avatarUrlRef = useRef();
+  // Валидация формы
+  const { values, errors, isValid, handleChange, resetForms } = useValidation('.form');
+
+  /////////////////////////////////////////////
+  // Управление формой через Ref             //
+  /////////////////////////////////////////////
+
+  // const avatarUrlRef = useRef();
+  // // Обработчик обновления аватара
+  // function handleSubmit(evt) {
+  //   evt.preventDefault();
+  //   onUpdateAvatar({
+  //     avatar: avatarUrlRef.current.value,
+  //   });
+  // }
+  // // Сброс полей формы при открытии
+  // useEffect(() => {
+  //   avatarUrlRef.current.value = '';
+  // }, [isOpen]);
+
+  // Сброс полей формы при открытии
+  useEffect(() => {
+    resetForms();
+  }, [isOpen, resetForms]);
   // Обработчик обновления аватара
   function handleSubmit(evt) {
     evt.preventDefault();
-    onUpdateAvatar({
-      avatar: avatarUrlRef.current.value,
-    });
+    onUpdateAvatar(values);
   }
-  // Сброс полей формы при открытии
-  useEffect(() => {
-    avatarUrlRef.current.value = '';
-  }, [isOpen]);
 
   return (
     <PopupWithForm
@@ -24,6 +42,7 @@ const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar, onOverlayClick, isLo
       onClose={onClose}
       onSubmit={handleSubmit}
       onOverlayClick={onOverlayClick}
+      isValid={isValid}
     >
       <input
         id="avatar"
@@ -32,10 +51,12 @@ const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar, onOverlayClick, isLo
         className="form__input"
         placeholder="Ссылка на аватар"
         aria-label="Ссылка на аватар"
-        ref={avatarUrlRef}
+        // ref={avatarUrlRef}
+        value={values.avatar || ''}
+        onChange={handleChange}
         required
       />
-      <span className="form__error-message avatar-error"></span>
+      <span className="form__error-message avatar-error">{errors.avatar}</span>
     </PopupWithForm>
   );
 };

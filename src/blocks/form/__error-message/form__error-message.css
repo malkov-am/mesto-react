@@ -6,7 +6,6 @@
   font-weight: 400;
   color: #f00;
   display: block;
-  opacity: 0;
   transition: opacity 0.2s linear;
 }
 

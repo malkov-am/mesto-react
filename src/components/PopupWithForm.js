@@ -9,6 +9,7 @@ const PopupWithForm = ({
   children,
   onSubmit,
   onOverlayClick,
+  isValid,
 }) => {
   return (
     <div
@@ -20,7 +21,12 @@ const PopupWithForm = ({
         <form className="form" name={name} noValidate onSubmit={onSubmit}>
           <h2 className="form__header">{title}</h2>
           {children}
-          <button className="form__save-button" title={btnTitle} type="submit">
+          <button
+            className={`${!isValid && 'form__save-button_inactive'} form__save-button`}
+            title={btnTitle}
+            type="submit"
+            disabled={!isValid}
+          >
             {btnTitle}
           </button>
         </form>
