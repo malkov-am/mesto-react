@@ -9,7 +9,6 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ConfirmDeletePopup from './ConfirmDeletePopup';
-import { keyboard } from '@testing-library/user-event/dist/keyboard';
 
 function App() {
   // Переменные состояния
