@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -15,10 +15,9 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [isViewImagePopupOpen, setViewImagePopupOpen] = useState(false);
   const [isConfirmDeletePopupOpen, setConfirmDeletePopupOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState({});
-  const [selectedCard, setSelectedCard] = useState({});
+  const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,8 +27,31 @@ function App() {
     console.error(`🔥ERROR: ${error}`);
     alert(`ОШИБКА: ${error}`);
   }
+  // Обработчик закрытия попапа по Escape
+  const handleEscClosePopup = useCallback((evt) => evt.key === 'Escape' && closeAllPopups(), []);
+  // Установка и снятие слушателя закрытия попапа по Escape
+  useEffect(() => {
+    if (
+      isEditProfilePopupOpen === true ||
+      isAddPlacePopupOpen === true ||
+      isEditAvatarPopupOpen === true ||
+      isConfirmDeletePopupOpen === true ||
+      selectedCard !== null
+    ) {
+      document.addEventListener('keydown', handleEscClosePopup);
+    } else {
+      document.removeEventListener('keydown', handleEscClosePopup);
+    }
+  }, [
+    isEditProfilePopupOpen,
+    isAddPlacePopupOpen,
+    isEditAvatarPopupOpen,
+    isConfirmDeletePopupOpen,
+    selectedCard,
+    handleEscClosePopup,
+  ]);
 
-  // Запись данных пользователя в переменную состояния, установка слушателя закрытия попапа по Escape
+  // Запись данных пользователя в переменную состояния
   useEffect(() => {
     api
       .getInitialData()
@@ -38,7 +60,6 @@ function App() {
         setCards([...cards, ...initialCards]);
       })
       .catch((error) => handleError(error));
-    document.addEventListener('keydown', (evt) => evt.key === 'Escape' && closeAllPopups());
   }, []);
 
   // Обработчик нажатия на кнопку редактирования профиля
@@ -63,14 +84,12 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
-    setViewImagePopupOpen(false);
     setConfirmDeletePopupOpen(false);
-    setSelectedCard({});
+    setSelectedCard(null);
   }
   // Обработчик нажатия на изображение в карточке
   function handleCardClick(card) {
     setSelectedCard(card);
-    setViewImagePopupOpen(true);
   }
   // Обработчик клика по оверлею
   function handleOverlayClick(evt) {
@@ -90,7 +109,7 @@ function App() {
   }
 
   // Обработчик удаления карточки
-  function handleCardDelete(card) {
+  function handleCardConfirmDelete(card) {
     setIsLoading(true);
     api
       .deleteCard(card._id)
@@ -172,7 +191,7 @@ function App() {
           isOpen={isConfirmDeletePopupOpen}
           onClose={closeAllPopups}
           cardToDelete={cardToDelete}
-          onConfirmDelete={handleCardDelete}
+          onConfirmDelete={handleCardConfirmDelete}
           onOverlayClick={handleOverlayClick}
           isLoading={isLoading}
         />
@@ -184,9 +203,8 @@ function App() {
           isLoading={isLoading}
         />
         <ImagePopup
-          card={selectedCard}
+          selectedCard={selectedCard}
           onClose={closeAllPopups}
-          isOpen={isViewImagePopupOpen}
           onOverlayClick={handleOverlayClick}
         />
       </div>

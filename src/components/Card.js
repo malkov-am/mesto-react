@@ -23,31 +23,29 @@ const Card = ({ card, onCardClick, onCardLike, onCardDelete }) => {
   const isLiked = card.likes.some((user) => user._id === currentUser._id);
 
   return (
-    <>
-      <article className="element">
-        <img className="element__image" src={link} alt={name} onClick={handleCardClick} />
-        <div className="element__caption">
-          <h2 className="element__title">{name}</h2>
-          <div className="element__like-container">
-            <button
-              className={`element__like-button ${isLiked && 'element__like-button_active'}`}
-              title="Нравится"
-              type="button"
-              aria-label="Поставить лайк"
-              onClick={handleLikeClick}
-            ></button>
-            <p className="element__like-counter">{likes.length}</p>
-          </div>
+    <article className="element">
+      <img className="element__image" src={link} alt={name} onClick={handleCardClick} />
+      <div className="element__caption">
+        <h2 className="element__title">{name}</h2>
+        <div className="element__like-container">
+          <button
+            className={`element__like-button ${isLiked && 'element__like-button_active'}`}
+            title="Нравится"
+            type="button"
+            aria-label="Поставить лайк"
+            onClick={handleLikeClick}
+          ></button>
+          <p className="element__like-counter">{likes.length}</p>
         </div>
-        <button
-          className={`element__delete-button ${isOwn && 'element__delete-button_active'}`}
-          title="Удалить"
-          type="button"
-          aria-label="Удалить карточку"
-          onClick={handleDeleteClick}
-        ></button>
-      </article>
-    </>
+      </div>
+      <button
+        className={`element__delete-button ${isOwn && 'element__delete-button_active'}`}
+        title="Удалить"
+        type="button"
+        aria-label="Удалить карточку"
+        onClick={handleDeleteClick}
+      ></button>
+    </article>
   );
 };
 

@@ -1,16 +1,16 @@
 import React from 'react';
 
-const ImagePopup = ({ card: { name, link }, isOpen, onClose, onOverlayClick }) => {
+const ImagePopup = ({ selectedCard, onClose, onOverlayClick }) => {
   return (
     <div
-      className={`popup popup_dark  ${isOpen ? 'popup_opened' : ''}`}
+      className={`popup popup_dark  ${selectedCard !== null && 'popup_opened'}`}
       id="view-image"
       onClick={onOverlayClick}
     >
       <div className="popup__image-container">
         <figure className="popup__figure">
-          <img className="popup__image" src={link} alt={name} />
-          <figcaption className="popup__image-caption">{name}</figcaption>
+          <img className="popup__image" src={selectedCard?.link} alt={selectedCard?.name} />
+          <figcaption className="popup__image-caption">{selectedCard?.name}</figcaption>
         </figure>
         <button
           className="popup__close-button"
