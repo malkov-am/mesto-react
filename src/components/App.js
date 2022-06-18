@@ -9,6 +9,7 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ConfirmDeletePopup from './ConfirmDeletePopup';
+import { keyboard } from '@testing-library/user-event/dist/keyboard';
 
 function App() {
   // Переменные состояния
@@ -29,7 +30,7 @@ function App() {
     alert(`ОШИБКА: ${error}`);
   }
 
-  // Запись данных пользователя в переменную состояния
+  // Запись данных пользователя в переменную состояния, установка слушателя закрытия попапа по Escape
   useEffect(() => {
     api
       .getInitialData()
@@ -38,6 +39,7 @@ function App() {
         setCards([...cards, ...initialCards]);
       })
       .catch((error) => handleError(error));
+    document.addEventListener('keydown', (evt) => evt.key === 'Escape' && closeAllPopups());
   }, []);
 
   // Обработчик нажатия на кнопку редактирования профиля
