@@ -32,11 +32,11 @@ function App() {
   // Установка и снятие слушателя закрытия попапа по Escape
   useEffect(() => {
     if (
-      isEditProfilePopupOpen === true ||
-      isAddPlacePopupOpen === true ||
-      isEditAvatarPopupOpen === true ||
-      isConfirmDeletePopupOpen === true ||
-      selectedCard !== null
+      isEditProfilePopupOpen ||
+      isAddPlacePopupOpen ||
+      isEditAvatarPopupOpen ||
+      isConfirmDeletePopupOpen ||
+      selectedCard
     ) {
       document.addEventListener('keydown', handleEscClosePopup);
     } else {
